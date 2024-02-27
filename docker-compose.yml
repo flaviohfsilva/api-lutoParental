@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  app: 
+    build: .
+    container_name: lutoParental-api
+    restart: always
+    tty: true
+
+    ports:
+      - 3002:3002
+
+    volumes:
+      - .:/home/node/app

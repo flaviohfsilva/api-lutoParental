@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  db:
+  container_name: bancoDados
+  image: mysql
+  restart: always
+  tty: true
+  ports:
+    - 3009:3006
+  volumes: ./docker/dbdata:/var/lib/mysql
