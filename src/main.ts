@@ -10,7 +10,10 @@ async function bootstrap() {
     .setTitle('Luto Parental')
     .setDescription('Documentação API Luto Parental')
     .setVersion('1.0')
-    .addTag('LP')
+    .addTag('Depoimentos')
+    .addTag('Direitos')
+    .addTag('Notícias')
+    .addTag('Tags')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
