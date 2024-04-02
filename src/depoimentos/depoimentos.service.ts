@@ -9,7 +9,7 @@ import { Depoimentos } from 'src/core/entities/Depoimentos';
 export class DepoimentosService {
   constructor(
     @Inject('DEPOIMENTOS_REPOSITORY')
-    private readonly DepoimentosRP: Repository<Depoimentos>
+    private readonly DepoimentosRP: Repository<Depoimentos>,
   ) {}
 
   create(createDepoimentoDto: CreateDepoimentoDto) {
