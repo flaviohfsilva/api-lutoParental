@@ -11,8 +11,13 @@ async function bootstrap() {
     .setDescription('Documentação API Luto Parental')
     .setVersion('1.0')
     .addTag('Depoimentos')
+<<<<<<< HEAD
     .addTag('Notícias')
     .addTag('Direitos')
+=======
+    .addTag('Direitos')
+    .addTag('Notícias')
+>>>>>>> 769ff7e6bb78801782d6542cb8b9cb990363bc64
     .addTag('Tags')
     .build();
   const document = SwaggerModule.createDocument(app, config);

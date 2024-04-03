@@ -3,13 +3,21 @@ import { CreateDepoimentoDto } from './dto/create-depoimento.dto';
 import { UpdateDepoimentoDto } from './dto/update-depoimento.dto';
 import { Retorno } from 'src/interfaces';
 import { Repository } from 'typeorm';
+<<<<<<< HEAD
 import { Depoimentos } from 'src/core/entities/Depoimentos.entity';
+=======
+import { Depoimentos } from 'src/core/entities/Depoimentos';
+>>>>>>> 769ff7e6bb78801782d6542cb8b9cb990363bc64
 
 @Injectable()
 export class DepoimentosService {
   constructor(
     @Inject('DEPOIMENTOS_REPOSITORY')
+<<<<<<< HEAD
     private readonly DepoimentosRP: Repository<Depoimentos>,
+=======
+    private readonly DepoimentosRP: Repository<Depoimentos>
+>>>>>>> 769ff7e6bb78801782d6542cb8b9cb990363bc64
   ) {}
 
   create(createDepoimentoDto: CreateDepoimentoDto) {
