@@ -8,9 +8,9 @@ export const databaseProviders = [
         type: 'mysql',
         host: 'localhost',
         port: 3306,
-        username: '',
-        password: '',
-        database: '',
+        username: 'user-parental',
+        password: 'Lut0P@rentaL',
+        database: 'lutoparental',
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         synchronize: true,
       });
