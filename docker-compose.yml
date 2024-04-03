@@ -12,3 +12,10 @@ services:
 
     volumes:
       - .:/home/node/app
+    
+    networks:
+      - luto_parental
+
+networks:
+  luto_parental:
+    external: true
