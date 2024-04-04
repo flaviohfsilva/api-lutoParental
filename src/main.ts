@@ -1,9 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import * as cors from 'cors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(cors());
 
   // Configuração do Swagger
   const config = new DocumentBuilder()
@@ -11,14 +14,10 @@ async function bootstrap() {
     .setDescription('Documentação API Luto Parental')
     .setVersion('1.0')
     .addTag('Depoimentos')
-<<<<<<< HEAD
     .addTag('Notícias')
     .addTag('Direitos')
-=======
-    .addTag('Direitos')
-    .addTag('Notícias')
->>>>>>> 769ff7e6bb78801782d6542cb8b9cb990363bc64
     .addTag('Tags')
+    .addTag('Estados')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

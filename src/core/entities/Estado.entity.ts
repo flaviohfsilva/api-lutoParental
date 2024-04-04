@@ -12,7 +12,7 @@ export class Estado {
   @Column('tinyint', { name: 'ativo', width: 1, default: () => "'1'" })
   ativo: boolean;
 
-  @Column('int', { primary: true, name: 'total_cont' })
+  @Column('int', { name: 'total_cont', default: () => "'0'" })
   TotalCont: number;
 
   @OneToMany(() => Depoimentos, (depoimentos) => depoimentos.estado)

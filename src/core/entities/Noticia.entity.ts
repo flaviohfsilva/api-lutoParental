@@ -32,6 +32,15 @@ export class Noticia {
   @Column('tinyint', { name: 'excluido', width: 1, default: () => "'0'" })
   excluido: boolean;
 
+  @Column('int', {
+    name: 'id_tipo_informacao',
+    default: () => "'2'",
+  })
+  idTipoInformacao: number;
+
+  @Column('blob', { name: 'img', nullable: true })
+  img: Buffer | null;
+
   @ManyToOne(() => Tags, (tags) => tags.noticias, {
     onDelete: 'NO ACTION',
     onUpdate: 'NO ACTION',

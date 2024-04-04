@@ -2,11 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CreateNoticiaDto } from './dto/create-noticia.dto';
 import { UpdateNoticiaDto } from './dto/update-noticia.dto';
 import { Repository } from 'typeorm';
-<<<<<<< HEAD
 import { Noticia } from 'src/core/entities/Noticia.entity';
-=======
-import { Noticia } from 'src/core/entities/Noticia';
->>>>>>> 769ff7e6bb78801782d6542cb8b9cb990363bc64
 import { Retorno } from 'src/interfaces';
 
 @Injectable()
@@ -43,8 +39,7 @@ export class NoticiasService {
 
     try {
       const noticia = this.NoticiaRP.find({ where: { excluido: false } });
-      retorno.dados = noticia;
-      return retorno;
+      return noticia;
     } catch (error) {
       retorno.erro = true;
       retorno.mensagem = `Erro ao realizar busca! ${error}`;
@@ -61,8 +56,7 @@ export class NoticiasService {
 
     try {
       const noticia = this.NoticiaRP.findOne({ where: { id: id } });
-      retorno.dados = noticia;
-      return retorno;
+      return noticia;
     } catch (error) {
       retorno.erro = true;
       retorno.mensagem = `Erro ao realizar busca por id! ${error}`;
@@ -100,8 +94,7 @@ export class NoticiasService {
 
       excluirNoticia.excluido = true;
       excluirNoticia.ativo = false;
-      await this.NoticiaRP.save(excluirNoticia);
-      return retorno;
+      return await this.NoticiaRP.save(excluirNoticia);
     } catch (error) {
       retorno.erro = true;
       retorno.mensagem = `Erro ao excluir notícia! ${error}`;

@@ -26,6 +26,15 @@ export class Direitos {
   @Column('int', { name: 'id_tag' })
   idTag: number;
 
+  @Column('int', {
+    name: 'id_tipo_informacao',
+    default: () => "'3'",
+  })
+  idTipoInformacao: number;
+
+  @Column('blob', { name: 'img', nullable: true })
+  img: Buffer | null;
+
   @Column('tinyint', { name: 'ativo', width: 1, default: () => "'1'" })
   ativo: boolean;
 

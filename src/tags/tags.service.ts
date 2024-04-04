@@ -1,22 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
-<<<<<<< HEAD
 import { Tags } from 'src/core/entities/Tags.entity';
-=======
-import { Tags } from 'src/core/entities/Tags';
->>>>>>> 769ff7e6bb78801782d6542cb8b9cb990363bc64
 import { Repository } from 'typeorm';
 import { Retorno } from 'src/interfaces';
 
 @Injectable()
 export class TagsService {
   constructor(
-<<<<<<< HEAD
-    @Inject('TAG_REPOSITORY')
-=======
     @Inject('TAGS_REPOSITORY')
->>>>>>> 769ff7e6bb78801782d6542cb8b9cb990363bc64
     private readonly TagsRP: Repository<Tags>,
   ) {}
 
@@ -46,8 +38,7 @@ export class TagsService {
 
     try {
       const tags = this.TagsRP.find({ where: { excluido: false } });
-      retorno.dados = tags;
-      return retorno;
+      return tags;
     } catch (error) {
       retorno.erro = true;
       retorno.mensagem = `Erro ao realizar busca! ${error}`;
@@ -63,8 +54,7 @@ export class TagsService {
 
     try {
       const tags = this.TagsRP.findOne({ where: { id: id } });
-      retorno.dados = tags;
-      return retorno;
+      return tags;
     } catch (error) {
       retorno.erro = true;
       retorno.mensagem = `Erro ao realizar busca por id! ${error}`;

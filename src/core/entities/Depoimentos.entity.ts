@@ -9,7 +9,6 @@ import {
 import { Tags } from './Tags.entity';
 import { Estado } from './Estado.entity';
 
-@Index('fk_depoimentos_tags_idx', ['idTag'], {})
 @Index('fk_depoimentos_estados_idx', ['idEstado'], {})
 @Entity('depoimentos', { schema: 'lutoparental' })
 export class Depoimentos {
@@ -18,6 +17,9 @@ export class Depoimentos {
 
   @Column('varchar', { name: 'titulo', nullable: true, length: 255 })
   titulo: string | null;
+
+  @Column('varchar', { name: 'nome', nullable: true, length: 255 })
+  nome: string | null;
 
   @Column('varchar', { name: 'texto', length: 1000 })
   texto: string;
@@ -28,9 +30,6 @@ export class Depoimentos {
   @Column('int', { name: 'id_estado' })
   idEstado: number;
 
-  @Column('int', { name: 'id_tag' })
-  idTag: number;
-
   @Column('datetime', { name: 'data_hora' })
   dataHora: Date;
 
@@ -40,10 +39,15 @@ export class Depoimentos {
   @Column('tinyint', { name: 'excluido', width: 1, default: () => "'0'" })
   excluido: boolean;
 
-  @ManyToOne(() => Tags, (tags) => tags.depoimentos, {
-    onDelete: 'NO ACTION',
-    onUpdate: 'NO ACTION',
+  @Column('int', {
+    name: 'id_tipo_informacao',
+    default: () => "'1'",
   })
+  idTipoInformacao: number;
+
+  @Column('blob', { name: 'img', nullable: true })
+  img: Buffer | null;
+
   @JoinColumn([{ name: 'id_tag', referencedColumnName: 'id' }])
   idTag2: Tags;
 

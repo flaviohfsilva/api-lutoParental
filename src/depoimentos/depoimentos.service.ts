@@ -1,23 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateDepoimentoDto } from './dto/create-depoimento.dto';
 import { UpdateDepoimentoDto } from './dto/update-depoimento.dto';
-import { Retorno } from 'src/interfaces';
+import {
+  PaginaDepoimentos,
+  RetornoPaginaDepoimentos,
+  Retorno,
+} from 'src/interfaces';
 import { Repository } from 'typeorm';
-<<<<<<< HEAD
 import { Depoimentos } from 'src/core/entities/Depoimentos.entity';
-=======
-import { Depoimentos } from 'src/core/entities/Depoimentos';
->>>>>>> 769ff7e6bb78801782d6542cb8b9cb990363bc64
 
 @Injectable()
 export class DepoimentosService {
   constructor(
     @Inject('DEPOIMENTOS_REPOSITORY')
-<<<<<<< HEAD
     private readonly DepoimentosRP: Repository<Depoimentos>,
-=======
-    private readonly DepoimentosRP: Repository<Depoimentos>
->>>>>>> 769ff7e6bb78801782d6542cb8b9cb990363bc64
   ) {}
 
   create(createDepoimentoDto: CreateDepoimentoDto) {
@@ -27,15 +23,16 @@ export class DepoimentosService {
     };
 
     try {
+      createDepoimentoDto.dataHora = new Date();
       const depoimento = this.DepoimentosRP.create(createDepoimentoDto);
-      this.DepoimentosRP.save(depoimento);
-      return retorno;
+      return this.DepoimentosRP.save(depoimento);
     } catch (error) {
       retorno.erro = true;
       retorno.mensagem = 'Erro ao criar depoimento';
     }
   }
 
+  // =========== Buscar Depoimentos ===========
   buscarDepoimentos() {
     const retorno: Retorno = {
       erro: false,
@@ -46,8 +43,7 @@ export class DepoimentosService {
       const depoimento = this.DepoimentosRP.find({
         where: { excluido: false },
       });
-      retorno.dados = depoimento;
-      return retorno;
+      return depoimento;
     } catch (error) {
       retorno.erro = true;
       retorno.mensagem = `Erro ao buscar depoimento ${error}`;
@@ -55,6 +51,7 @@ export class DepoimentosService {
     }
   }
 
+  // =========== Buscar Depoimentos  por id===========
   buscarDepoimentoPorId(id: number) {
     const retorno: Retorno = {
       erro: false,
@@ -65,8 +62,7 @@ export class DepoimentosService {
       const depoimento = this.DepoimentosRP.findOne({
         where: { id: id },
       });
-      retorno.dados = depoimento;
-      return retorno;
+      return depoimento;
     } catch (error) {
       retorno.erro = true;
       retorno.mensagem = `Erro ao realizar busca por id ${error}`;
@@ -74,7 +70,11 @@ export class DepoimentosService {
     }
   }
 
-  async atualizarDepoimento(id: number, updateDepoimentoDto: UpdateDepoimentoDto) {
+  // =========== Atualizar Depoimentos ===========
+  async atualizarDepoimento(
+    id: number,
+    updateDepoimentoDto: UpdateDepoimentoDto,
+  ) {
     const retorno: Retorno = {
       erro: false,
       mensagem: 'Depoimento atualizado com sucesso!',
@@ -90,6 +90,7 @@ export class DepoimentosService {
     }
   }
 
+  // =========== Excluir Depoimentos ===========
   async excluirDepoimento(id: number) {
     const retorno: Retorno = {
       erro: false,
@@ -102,12 +103,100 @@ export class DepoimentosService {
       });
       excluirDepoimento.excluido = true;
       excluirDepoimento.ativo = false;
-      await this.DepoimentosRP.save(excluirDepoimento);
-      return retorno;
+      return await this.DepoimentosRP.save(excluirDepoimento);
     } catch (error) {
       retorno.erro = true;
       retorno.mensagem = `Erro ao excluir depoimento ${error}`;
       return retorno;
+    }
+  }
+
+  // =========== Paginação Depoimentos ===========
+  async paginacaoDepoimentos(paginaDepoimentos: PaginaDepoimentos) {
+    try {
+      let depoimentos;
+
+      // Limite de dados por página
+      const registrosPorPagina = 6;
+
+      // Cálculo para passar de página
+      const proximaPagina = (paginaDepoimentos.pagina - 1) * registrosPorPagina;
+
+      // Identificador se vai avançar a página.
+      let avancarPagina = false;
+
+      // Identificador para voltar a página.
+      let voltarPagina = false;
+
+      const retornoPaginaDepoimentos: RetornoPaginaDepoimentos = {
+        erro: false,
+        msg: '',
+        paginaAtual: paginaDepoimentos.pagina,
+        dados: depoimentos,
+        avancarPagina: avancarPagina,
+        voltarPagina: voltarPagina,
+      };
+
+      depoimentos = await this.DepoimentosRP.find({
+        where: {
+          id: paginaDepoimentos.id,
+        },
+        take: registrosPorPagina + 1,
+        skip: proximaPagina,
+        order: { id: 'ASC' },
+      });
+
+      // Lógica para identificar e passar a página
+      const passarPagina = depoimentos.length > registrosPorPagina;
+
+      if (passarPagina) {
+        avancarPagina = true;
+        depoimentos.pop();
+      }
+
+      // Lógica para identificar e voltar a página
+      const paginaAnterior = paginaDepoimentos.pagina - 1;
+
+      if (paginaAnterior) {
+        voltarPagina = true;
+      }
+
+      const Depoimentos: {
+        titulo: string | null;
+        texto: string;
+        genero: string;
+        estado: string;
+      }[] = [];
+
+      for (let i = 0; i < depoimentos.length; i++) {
+        const historias: Depoimentos = depoimentos[i];
+
+        Depoimentos.push({
+          titulo: historias.titulo,
+          texto: historias.texto,
+          genero: historias.genero,
+          estado: historias.estado.nome,
+        });
+
+        if (depoimentos.length === 0) {
+          retornoPaginaDepoimentos.erro = true;
+          retornoPaginaDepoimentos.msg =
+            'Erro ao encontrar página. As páginas chegeram ao fim!';
+          retornoPaginaDepoimentos.paginaAtual = paginaDepoimentos.pagina;
+          retornoPaginaDepoimentos.dados = depoimentos;
+          retornoPaginaDepoimentos.avancarPagina = avancarPagina;
+          retornoPaginaDepoimentos.voltarPagina = voltarPagina;
+          console.log({ retornoPaginaDepoimentos });
+        }
+        retornoPaginaDepoimentos.msg = 'Página encontrada com sucesso!';
+        retornoPaginaDepoimentos.paginaAtual = paginaDepoimentos.pagina;
+        retornoPaginaDepoimentos.dados = Depoimentos;
+        retornoPaginaDepoimentos.avancarPagina = avancarPagina;
+        retornoPaginaDepoimentos.voltarPagina = voltarPagina;
+        console.log({ retornoPaginaDepoimentos });
+      }
+    } catch (error) {
+      console.log('Erro: ', error);
     }
   }
 }

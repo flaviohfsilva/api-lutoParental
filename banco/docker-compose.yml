@@ -10,7 +10,14 @@ services:
       - 3009:3006
     volumes: 
       - ./docker/dbdata:/var/lib/mysql
-    # environment: 
-    #   - MYSQL_DATABASE=lutoparental
-    #   - MYSQL_ROOT_PASSWORD=Lut0P@rentaL
-    #   - MYSQL_USER=user-parental
+    environment: 
+      - MYSQL_DATABASE=lutoparental
+      - MYSQL_ROOT_PASSWORD=Lut0P@rentaL
+      - MYSQL_USER=user-parental
+    
+    networks:
+      - luto_parental
+
+networks:
+  luto_parental:
+    external: true

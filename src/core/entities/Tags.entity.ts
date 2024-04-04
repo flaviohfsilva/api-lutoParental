@@ -17,9 +17,6 @@ export class Tags {
   @Column('tinyint', { name: 'excluido', width: 1, default: () => "'0'" })
   excluido: boolean;
 
-  @OneToMany(() => Depoimentos, (depoimentos) => depoimentos.idTag2)
-  depoimentos: Depoimentos[];
-
   @OneToMany(() => Direitos, (direitos) => direitos.idTag2)
   direitos: Direitos[];
 
