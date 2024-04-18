@@ -5,5 +5,5 @@ export class CreateDepoimentoDto {
   genero: string;
   idEstado: number;
   dataHora: Date;
-  // img: Buffer | null;
+  img: Buffer | null;
 }

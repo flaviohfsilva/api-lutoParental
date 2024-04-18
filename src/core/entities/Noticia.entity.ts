@@ -38,8 +38,8 @@ export class Noticia {
   })
   idTipoInformacao: number;
 
-  @Column('blob', { name: 'img', nullable: true })
-  img: Buffer | null;
+  @Column('varchar', { name: 'img', nullable: true, length: 245 })
+  img: string | null;
 
   @ManyToOne(() => Tags, (tags) => tags.noticias, {
     onDelete: 'NO ACTION',

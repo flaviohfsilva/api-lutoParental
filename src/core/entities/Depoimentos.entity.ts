@@ -27,13 +27,13 @@ export class Depoimentos {
   @Column('varchar', { name: 'genero', length: 45 })
   genero: string;
 
-  @Column('int', { name: 'id_estado' })
+  @Column('int', { name: 'id_estado', nullable: true })
   idEstado: number;
 
   @Column('datetime', { name: 'data_hora' })
   dataHora: Date;
 
-  @Column('tinyint', { name: 'ativo', width: 1, default: () => "'1'" })
+  @Column('tinyint', { name: 'ativo', width: 1, default: () => "'0'" })
   ativo: boolean;
 
   @Column('tinyint', { name: 'excluido', width: 1, default: () => "'0'" })

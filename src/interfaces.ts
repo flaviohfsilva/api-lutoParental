@@ -4,22 +4,24 @@ export interface Retorno {
   dados?: {}[] | any;
 }
 
-export interface PaginaDepoimentos {
-  id: number;
+export interface Paginas {
+  excluido: boolean;
   pagina: number;
 }
 
-export interface RetornoPaginaDepoimentos {
+export interface RetornoPaginacao {
   erro: boolean;
   msg: string;
   paginaAtual: number;
-  dados: object[];
+  totalPaginas: number[];
+  dados: {}[];
   avancarPagina: boolean;
   voltarPagina: boolean;
 }
 
-// export interface RetornoDepoimento {
-//   id: number;
-//   nome: string;
-
-// }
+export interface NoticiaRetorno {
+  titulo: string;
+  texto: string;
+  tag: string;
+  dataHora: string;
+}

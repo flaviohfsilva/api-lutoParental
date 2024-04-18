@@ -3,5 +3,4 @@ export class CreateNoticiaDto {
   texto: string | null;
   dataHora: Date;
   idTag: number;
-
 }

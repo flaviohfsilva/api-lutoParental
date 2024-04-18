@@ -1,22 +1,20 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateDepoimentoDto } from './dto/create-depoimento.dto';
 import { UpdateDepoimentoDto } from './dto/update-depoimento.dto';
-import {
-  PaginaDepoimentos,
-  RetornoPaginaDepoimentos,
-  Retorno,
-} from 'src/interfaces';
+import { Retorno, Paginas, RetornoPaginacao } from 'src/interfaces';
 import { Repository } from 'typeorm';
 import { Depoimentos } from 'src/core/entities/Depoimentos.entity';
+import { DiscordClient } from 'src/discord/discord.client';
 
 @Injectable()
 export class DepoimentosService {
   constructor(
     @Inject('DEPOIMENTOS_REPOSITORY')
     private readonly DepoimentosRP: Repository<Depoimentos>,
+    public readonly discordClient: DiscordClient,
   ) {}
 
-  create(createDepoimentoDto: CreateDepoimentoDto) {
+  async create(createDepoimentoDto: CreateDepoimentoDto) {
     const retorno: Retorno = {
       erro: false,
       mensagem: 'Depoimento criado com sucesso!',
@@ -24,8 +22,20 @@ export class DepoimentosService {
 
     try {
       createDepoimentoDto.dataHora = new Date();
+      console.log({ createDepoimentoDto });
       const depoimento = this.DepoimentosRP.create(createDepoimentoDto);
-      return this.DepoimentosRP.save(depoimento);
+      const historias = await this.DepoimentosRP.save(depoimento);
+      console.log('Histórias: ', historias);
+
+      await this.discordClient.enviarDepoimento({
+        id: historias.id,
+        nome: historias.nome,
+        titulo: historias.titulo,
+        texto: historias.texto,
+        genero: historias.genero,
+      });
+
+      return historias;
     } catch (error) {
       retorno.erro = true;
       retorno.mensagem = 'Erro ao criar depoimento';
@@ -42,6 +52,7 @@ export class DepoimentosService {
     try {
       const depoimento = this.DepoimentosRP.find({
         where: { excluido: false },
+        relations: ['estado'],
       });
       return depoimento;
     } catch (error) {
@@ -112,7 +123,7 @@ export class DepoimentosService {
   }
 
   // =========== Paginação Depoimentos ===========
-  async paginacaoDepoimentos(paginaDepoimentos: PaginaDepoimentos) {
+  async paginacaoDepoimentos(paginaDepoimentos: Paginas) {
     try {
       let depoimentos;
 
@@ -128,23 +139,41 @@ export class DepoimentosService {
       // Identificador para voltar a página.
       let voltarPagina = false;
 
-      const retornoPaginaDepoimentos: RetornoPaginaDepoimentos = {
+      const retornoPaginaDepoimentos: RetornoPaginacao = {
         erro: false,
         msg: '',
         paginaAtual: paginaDepoimentos.pagina,
-        dados: depoimentos,
+        totalPaginas: [],
+        dados: [],
         avancarPagina: avancarPagina,
         voltarPagina: voltarPagina,
       };
 
+      // eslint-disable-next-line prefer-const
       depoimentos = await this.DepoimentosRP.find({
         where: {
-          id: paginaDepoimentos.id,
+          excluido: paginaDepoimentos.excluido,
         },
         take: registrosPorPagina + 1,
         skip: proximaPagina,
         order: { id: 'ASC' },
+        relations: ['estado'],
       });
+
+      // Lógica para identificar as páginas e mostrar no front-end
+      const numeroPagina = await this.DepoimentosRP.count({
+        where: {
+          excluido: paginaDepoimentos.excluido,
+        },
+      });
+
+      const totalPaginas = Math.ceil(numeroPagina / registrosPorPagina);
+      // Criar um array de números de página
+      const totalPaginasArray = [];
+      for (let i = 1; i <= totalPaginas; i++) {
+        totalPaginasArray.push(i);
+      }
+      console.log(totalPaginasArray);
 
       // Lógica para identificar e passar a página
       const passarPagina = depoimentos.length > registrosPorPagina;
@@ -162,9 +191,10 @@ export class DepoimentosService {
       }
 
       const Depoimentos: {
+        id: number;
         titulo: string | null;
         texto: string;
-        genero: string;
+        dataHora: string;
         estado: string;
       }[] = [];
 
@@ -172,31 +202,54 @@ export class DepoimentosService {
         const historias: Depoimentos = depoimentos[i];
 
         Depoimentos.push({
+          id: historias.id,
           titulo: historias.titulo,
           texto: historias.texto,
-          genero: historias.genero,
-          estado: historias.estado.nome,
+          dataHora: historias.dataHora.toLocaleString(),
+          estado: historias.estado?.nome,
         });
+      }
 
-        if (depoimentos.length === 0) {
-          retornoPaginaDepoimentos.erro = true;
-          retornoPaginaDepoimentos.msg =
-            'Erro ao encontrar página. As páginas chegeram ao fim!';
-          retornoPaginaDepoimentos.paginaAtual = paginaDepoimentos.pagina;
-          retornoPaginaDepoimentos.dados = depoimentos;
-          retornoPaginaDepoimentos.avancarPagina = avancarPagina;
-          retornoPaginaDepoimentos.voltarPagina = voltarPagina;
-          console.log({ retornoPaginaDepoimentos });
-        }
-        retornoPaginaDepoimentos.msg = 'Página encontrada com sucesso!';
+      if (depoimentos.length === 0) {
+        retornoPaginaDepoimentos.erro = true;
+        retornoPaginaDepoimentos.msg =
+          'Erro ao encontrar página. As páginas chegeram ao fim!';
         retornoPaginaDepoimentos.paginaAtual = paginaDepoimentos.pagina;
-        retornoPaginaDepoimentos.dados = Depoimentos;
+        retornoPaginaDepoimentos.totalPaginas = totalPaginasArray;
+        retornoPaginaDepoimentos.dados = depoimentos;
         retornoPaginaDepoimentos.avancarPagina = avancarPagina;
         retornoPaginaDepoimentos.voltarPagina = voltarPagina;
         console.log({ retornoPaginaDepoimentos });
+        return retornoPaginaDepoimentos;
       }
+
+      retornoPaginaDepoimentos.msg = 'Página encontrada com sucesso!';
+      retornoPaginaDepoimentos.paginaAtual = paginaDepoimentos.pagina;
+      retornoPaginaDepoimentos.dados = Depoimentos;
+      retornoPaginaDepoimentos.avancarPagina = avancarPagina;
+      retornoPaginaDepoimentos.voltarPagina = voltarPagina;
+      console.log('Retorno da Página', retornoPaginaDepoimentos.dados);
+      return retornoPaginaDepoimentos;
     } catch (error) {
       console.log('Erro: ', error);
+    }
+  }
+
+  // =========== Validação Depoimentos ===========
+  async validarDepoimento(id: number) {
+    console.log('Chegou no validarDepoimento');
+    try {
+      const depoimento = await this.DepoimentosRP.findOne({
+        where: {
+          id,
+        },
+      });
+      if (depoimento) {
+        depoimento.ativo = true;
+        this.DepoimentosRP.save(depoimento);
+      }
+    } catch (error) {
+      console.error('Erro ao validar: ', error);
     }
   }
 }
