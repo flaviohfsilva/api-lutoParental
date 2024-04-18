@@ -1,4 +1,4 @@
-import { Depoimentos } from 'src/core/entities/Depoimentos';
+import { Depoimentos } from 'src/core/entities/Depoimentos.entity';
 import { DataSource } from 'typeorm';
 
 // Criação do repositório dos Depoimentos/Histórias

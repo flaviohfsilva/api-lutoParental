@@ -1,8 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { DireitosService } from './direitos.service';
 import { CreateDireitoDto } from './dto/create-direito.dto';
 import { UpdateDireitoDto } from './dto/update-direito.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Direitos')
 @Controller('direitos')
 export class DireitosController {
   constructor(private readonly direitosService: DireitosService) {}
@@ -12,23 +22,23 @@ export class DireitosController {
     return this.direitosService.create(createDireitoDto);
   }
 
-  @Get()
+  @Get('buscarTodos')
   findAll() {
-    return this.direitosService.findAll();
+    return this.direitosService.buscarTodos();
   }
 
-  @Get(':id')
+  @Get('buscarPor/:id')
   findOne(@Param('id') id: string) {
-    return this.direitosService.findOne(+id);
+    return this.direitosService.buscarPorId(+id);
   }
 
-  @Patch(':id')
+  @Patch('atualizar/:id')
   update(@Param('id') id: string, @Body() updateDireitoDto: UpdateDireitoDto) {
-    return this.direitosService.update(+id, updateDireitoDto);
+    return this.direitosService.atualizarDireito(+id, updateDireitoDto);
   }
 
-  @Delete(':id')
+  @Delete('excluir/:id')
   remove(@Param('id') id: string) {
-    return this.direitosService.remove(+id);
+    return this.direitosService.excluirDireito(+id);
   }
 }

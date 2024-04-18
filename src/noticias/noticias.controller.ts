@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { NoticiasService } from './noticias.service';
 import { CreateNoticiaDto } from './dto/create-noticia.dto';
 import { UpdateNoticiaDto } from './dto/update-noticia.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Paginas } from 'src/interfaces';
 
 @ApiTags('Notícias')
 @Controller('noticias')
@@ -24,7 +26,7 @@ export class NoticiasController {
 
   @Get('buscarTodas')
   findAll() {
-    return this.noticiasService.buscarTodasNoticias;
+    return this.noticiasService.buscarTodasNoticias();
   }
 
   @Get('buscarPor:id')
@@ -40,5 +42,10 @@ export class NoticiasController {
   @Delete('excluir:id')
   remove(@Param('id') id: string) {
     return this.noticiasService.excluirNoticia(+id);
+  }
+
+  @Get('buscarPaginas/')
+  paginacaoNoticias(@Query() paginaNoticias: Paginas) {
+    return this.noticiasService.paginacaoNoticias(paginaNoticias);
   }
 }

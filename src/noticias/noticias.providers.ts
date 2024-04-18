@@ -1,4 +1,4 @@
-import { Noticia } from 'src/core/entities/Noticia';
+import { Noticia } from 'src/core/entities/Noticia.entity';
 import { DataSource } from 'typeorm';
 
 // Criação do repositório da Noticia

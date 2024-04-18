@@ -1,4 +1,4 @@
-import { Tags } from 'src/core/entities/Tags';
+import { Tags } from 'src/core/entities/Tags.entity';
 import { DataSource } from 'typeorm';
 
 // Criação do repositório das Tags

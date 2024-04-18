@@ -6,19 +6,19 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Tags } from './Tags';
+import { Tags } from './Tags.entity';
 
-@Index('fk_noticia_tags_idx', ['idTag'], {})
-@Entity('noticia', { schema: 'lutoparental' })
-export class Noticia {
+@Index('fk_direitos_tags_idx', ['idTag'], {})
+@Entity('direitos', { schema: 'lutoparental' })
+export class Direitos {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
   @Column('varchar', { name: 'titulo', length: 255 })
   titulo: string;
 
-  @Column('varchar', { name: 'texto', nullable: true, length: 1000 })
-  texto: string | null;
+  @Column('varchar', { name: 'texto', length: 1000 })
+  texto: string;
 
   @Column('datetime', { name: 'data_hora' })
   dataHora: Date;
@@ -26,13 +26,22 @@ export class Noticia {
   @Column('int', { name: 'id_tag' })
   idTag: number;
 
+  @Column('int', {
+    name: 'id_tipo_informacao',
+    default: () => "'3'",
+  })
+  idTipoInformacao: number;
+
+  @Column('blob', { name: 'img', nullable: true })
+  img: Buffer | null;
+
   @Column('tinyint', { name: 'ativo', width: 1, default: () => "'1'" })
   ativo: boolean;
 
   @Column('tinyint', { name: 'excluido', width: 1, default: () => "'0'" })
   excluido: boolean;
 
-  @ManyToOne(() => Tags, (tags) => tags.noticias, {
+  @ManyToOne(() => Tags, (tags) => tags.direitos, {
     onDelete: 'NO ACTION',
     onUpdate: 'NO ACTION',
   })

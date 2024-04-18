@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Depoimentos } from './Depoimentos';
-import { Direitos } from './Direitos';
-import { Noticia } from './Noticia';
+import { Depoimentos } from './Depoimentos.entity';
+import { Direitos } from './Direitos.entity';
+import { Noticia } from './Noticia.entity';
 
 @Entity('tags', { schema: 'lutoparental' })
 export class Tags {
@@ -16,9 +16,6 @@ export class Tags {
 
   @Column('tinyint', { name: 'excluido', width: 1, default: () => "'0'" })
   excluido: boolean;
-
-  @OneToMany(() => Depoimentos, (depoimentos) => depoimentos.idTag2)
-  depoimentos: Depoimentos[];
 
   @OneToMany(() => Direitos, (direitos) => direitos.idTag2)
   direitos: Direitos[];

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
-import { Tags } from 'src/core/entities/Tags';
+import { Tags } from 'src/core/entities/Tags.entity';
 import { Repository } from 'typeorm';
 import { Retorno } from 'src/interfaces';
 
@@ -38,8 +38,7 @@ export class TagsService {
 
     try {
       const tags = this.TagsRP.find({ where: { excluido: false } });
-      retorno.dados = tags;
-      return retorno;
+      return tags;
     } catch (error) {
       retorno.erro = true;
       retorno.mensagem = `Erro ao realizar busca! ${error}`;
@@ -55,8 +54,7 @@ export class TagsService {
 
     try {
       const tags = this.TagsRP.findOne({ where: { id: id } });
-      retorno.dados = tags;
-      return retorno;
+      return tags;
     } catch (error) {
       retorno.erro = true;
       retorno.mensagem = `Erro ao realizar busca por id! ${error}`;

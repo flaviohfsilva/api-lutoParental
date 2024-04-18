@@ -1,9 +1,9 @@
-import { Column, Entity, OneToMany } from 'typeorm';
-import { Depoimentos } from './Depoimentos';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Depoimentos } from './Depoimentos.entity';
 
 @Entity('estado', { schema: 'lutoparental' })
 export class Estado {
-  @Column('int', { primary: true, name: 'id' })
+  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
   @Column('varchar', { name: 'nome', length: 45 })
@@ -12,7 +12,7 @@ export class Estado {
   @Column('tinyint', { name: 'ativo', width: 1, default: () => "'1'" })
   ativo: boolean;
 
-  @Column('int', { primary: true, name: 'total_cont' })
+  @Column('int', { name: 'total_cont', default: () => "'0'" })
   TotalCont: number;
 
   @OneToMany(() => Depoimentos, (depoimentos) => depoimentos.estado)
