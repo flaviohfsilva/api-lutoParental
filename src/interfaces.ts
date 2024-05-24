@@ -7,6 +7,8 @@ export interface Retorno {
 export interface Paginas {
   excluido: boolean;
   pagina: number;
+  filtro: string;
+  idTag?: number;
 }
 
 export interface RetornoPaginacao {
@@ -14,7 +16,8 @@ export interface RetornoPaginacao {
   msg: string;
   paginaAtual: number;
   totalPaginas: number[];
-  dados: {}[];
+  dados: object[];
+  filtro: string;
   avancarPagina: boolean;
   voltarPagina: boolean;
 }
@@ -24,4 +27,11 @@ export interface NoticiaRetorno {
   texto: string;
   tag: string;
   dataHora: string;
+}
+
+export interface EmailContato {
+  nome: string;
+  email: string;
+  mensagem: string;
+  isChecked: boolean;
 }

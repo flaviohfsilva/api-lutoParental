@@ -2,15 +2,17 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CreateDepoimentoDto } from './dto/create-depoimento.dto';
 import { UpdateDepoimentoDto } from './dto/update-depoimento.dto';
 import { Retorno, Paginas, RetornoPaginacao } from 'src/interfaces';
-import { Repository } from 'typeorm';
+import { Repository, FindManyOptions, FindOptionsOrder } from 'typeorm';
 import { Depoimentos } from 'src/core/entities/Depoimentos.entity';
 import { DiscordClient } from 'src/discord/discord.client';
+import { EstadosService } from 'src/estados/estados.service';
 
 @Injectable()
 export class DepoimentosService {
   constructor(
     @Inject('DEPOIMENTOS_REPOSITORY')
     private readonly DepoimentosRP: Repository<Depoimentos>,
+    private estadoService: EstadosService,
     public readonly discordClient: DiscordClient,
   ) {}
 
@@ -114,7 +116,29 @@ export class DepoimentosService {
       });
       excluirDepoimento.excluido = true;
       excluirDepoimento.ativo = false;
+
+      // Decrementa o contador de histórias do depoimentos
+      this.estadoService.decrementarTotalEstado(excluirDepoimento.idEstado);
+
       return await this.DepoimentosRP.save(excluirDepoimento);
+    } catch (error) {
+      retorno.erro = true;
+      retorno.mensagem = `Erro ao excluir depoimento ${error}`;
+      return retorno;
+    }
+  }
+
+  async excluirDepoimentoBanco(id: number) {
+    const retorno: Retorno = {
+      erro: false,
+      mensagem: 'Depoimento excluído com sucesso!',
+    };
+
+    try {
+      const excluirDepoimento = await this.DepoimentosRP.findOne({
+        where: { id: id },
+      });
+      return await this.DepoimentosRP.remove(excluirDepoimento);
     } catch (error) {
       retorno.erro = true;
       retorno.mensagem = `Erro ao excluir depoimento ${error}`;
@@ -125,7 +149,7 @@ export class DepoimentosService {
   // =========== Paginação Depoimentos ===========
   async paginacaoDepoimentos(paginaDepoimentos: Paginas) {
     try {
-      let depoimentos;
+      // let depoimentos;
 
       // Limite de dados por página
       const registrosPorPagina = 6;
@@ -142,6 +166,7 @@ export class DepoimentosService {
       const retornoPaginaDepoimentos: RetornoPaginacao = {
         erro: false,
         msg: '',
+        filtro: '',
         paginaAtual: paginaDepoimentos.pagina,
         totalPaginas: [],
         dados: [],
@@ -150,21 +175,34 @@ export class DepoimentosService {
       };
 
       // eslint-disable-next-line prefer-const
-      depoimentos = await this.DepoimentosRP.find({
+      let where: FindManyOptions<Depoimentos> = {
         where: {
           excluido: paginaDepoimentos.excluido,
         },
+      };
+
+      // Se existir o filtro, vai filtrar e fazer a busca no banco.
+      if (paginaDepoimentos.filtro) {
+        console.log('filtro: ', paginaDepoimentos.filtro);
+        const filtroWhere = await this.filtroDepoimentos(
+          paginaDepoimentos.filtro,
+        );
+        where.order = filtroWhere;
+      }
+
+      // eslint-disable-next-line prefer-const
+      let depoimentos = await this.DepoimentosRP.find({
+        where: where.where,
         take: registrosPorPagina + 1,
         skip: proximaPagina,
-        order: { id: 'ASC' },
+        order: where.order,
         relations: ['estado'],
       });
 
       // Lógica para identificar as páginas e mostrar no front-end
       const numeroPagina = await this.DepoimentosRP.count({
-        where: {
-          excluido: paginaDepoimentos.excluido,
-        },
+        where: where.where,
+        order: where.order,
       });
 
       const totalPaginas = Math.ceil(numeroPagina / registrosPorPagina);
@@ -225,6 +263,7 @@ export class DepoimentosService {
 
       retornoPaginaDepoimentos.msg = 'Página encontrada com sucesso!';
       retornoPaginaDepoimentos.paginaAtual = paginaDepoimentos.pagina;
+      retornoPaginaDepoimentos.totalPaginas = totalPaginasArray;
       retornoPaginaDepoimentos.dados = Depoimentos;
       retornoPaginaDepoimentos.avancarPagina = avancarPagina;
       retornoPaginaDepoimentos.voltarPagina = voltarPagina;
@@ -246,10 +285,44 @@ export class DepoimentosService {
       });
       if (depoimento) {
         depoimento.ativo = true;
+        this.estadoService.atualizarContadorEstado(depoimento.idEstado);
         this.DepoimentosRP.save(depoimento);
       }
     } catch (error) {
       console.error('Erro ao validar: ', error);
+    }
+  }
+
+  ordenarDepoimentos(depoimentos: Depoimentos[]) {
+    return depoimentos.sort((a, b) => {
+      if (a.dataHora > b.dataHora) return 1;
+      if (a.dataHora < b.dataHora) return -1;
+      return 0;
+    });
+  }
+
+  async filtroDepoimentos(filtro: string) {
+    try {
+      let consulta: FindOptionsOrder<Depoimentos>;
+
+      switch (filtro) {
+        case 'Mais Recentes':
+          consulta = {
+            dataHora: 'DESC',
+          };
+          break;
+        case 'Mais Antigos':
+          consulta = {
+            dataHora: 'ASC',
+          };
+          break;
+        default:
+          break;
+      }
+
+      return consulta;
+    } catch (error) {
+      throw new Error('Erro ao filtrar notícias e artigos: ' + error.message);
     }
   }
 }

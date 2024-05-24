@@ -17,7 +17,7 @@ export class Direitos {
   @Column('varchar', { name: 'titulo', length: 255 })
   titulo: string;
 
-  @Column('varchar', { name: 'texto', length: 1000 })
+  @Column('varchar', { name: 'texto', length: 10000 })
   texto: string;
 
   @Column('datetime', { name: 'data_hora' })
@@ -32,8 +32,8 @@ export class Direitos {
   })
   idTipoInformacao: number;
 
-  @Column('blob', { name: 'img', nullable: true })
-  img: Buffer | null;
+  @Column('varchar', { name: 'img', nullable: true, length: 245 })
+  img: string | null;
 
   @Column('tinyint', { name: 'ativo', width: 1, default: () => "'1'" })
   ativo: boolean;
