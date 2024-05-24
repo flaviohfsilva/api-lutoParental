@@ -37,6 +37,11 @@ export class DiscordClient {
                     inline: true,
                   },
                 ],
+
+                footer: {
+                  text: 'Caso a história não siga as nossas diretizes, aperte no botão abaixo',
+                  inline: true,
+                },
               },
             ],
           },

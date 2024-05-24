@@ -8,5 +8,6 @@ import { estadosProviders } from './estados.providers';
   imports: [DatabaseModule],
   controllers: [EstadosController],
   providers: [...estadosProviders, EstadosService],
+  exports: [...estadosProviders, EstadosService],
 })
 export class EstadosModule {}

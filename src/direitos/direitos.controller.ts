@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { DireitosService } from './direitos.service';
 import { CreateDireitoDto } from './dto/create-direito.dto';
 import { UpdateDireitoDto } from './dto/update-direito.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Paginas } from 'src/interfaces';
 
 @ApiTags('Direitos')
 @Controller('direitos')
@@ -40,5 +42,11 @@ export class DireitosController {
   @Delete('excluir/:id')
   remove(@Param('id') id: string) {
     return this.direitosService.excluirDireito(+id);
+  }
+
+  @Get('buscarPaginas/')
+  paginacaoDepoimentos(@Query() direitos: Paginas) {
+    console.log({ direitos });
+    return this.direitosService.paginacaoDireitos(direitos);
   }
 }

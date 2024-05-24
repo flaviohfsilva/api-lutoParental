@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{!-- <title>Newsletter</title> --}}
+
+    <style>
+
+        body {
+            background-color: #F4EEED;
+        }
+
+        .navbar {
+            border-bottom: #D9B2A9;
+        }
+
+        .top-nav{
+            background-color: #A5A68F;;
+        }
+        
+        .news-body {
+            background-color: #F2DBD5;
+        }
+
+        .news-container{
+            margin: 5%;
+        }
+
+        .text-news{
+            color: black;
+        }
+
+        .oque-esperar{
+            color: black;
+            text-align: justify;
+        }
+
+        .news-pontos{
+            margin: 3% 0;
+        }
+
+        .info-news{
+            color: black;
+            text-align: justify;  
+        }
+
+        .text-agradecimento{
+            color: black;
+        }
+
+      
+        .container-footer{
+            background: #A5A68F;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            padding: 5% 5% 0;
+        }
+
+        .footer-logo{
+            margin: 4% 0;
+        }
+
+        .footer-logo h2{
+            color: black;
+            font-family: "Sora", sans-serif;
+            font-size: 30px;
+            font-weight: 400;
+        }
+
+        .logo-area{
+            margin: 2%;
+        }
+
+        .logo-area h2{
+            margin: 0 0 2%
+        }
+
+        .subtitle{
+            color: black;
+            font-family: "Sora", sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+
+        .social-list{
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+
+        .social-links {
+            background-color: #D9B2A9;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            font-size: 24px;
+            height: 45px;
+            margin: 1%;
+            text-align: center;
+            opacity: 66%;
+            width: 45px;
+        }
+
+        .icon{
+            margin: 20% 0;
+            text-align: center;
+        }
+
+        .copyrights{
+            font-family: "Open Sans", sans-serif;
+            font-size: 10px
+            margin: 2% 0;
+            padding: 1% 0 3%;
+            text-align: center;
+        }
+
+
+    </style>
+</head>
+<body style="background-color: #F4EEED;">
+
+    {{!--  =================== NAVBAR =================== --}}
+    <header>
+        <nav class="navbar">
+            <div class="navbar-container">
+                 {{!--  =================== TOP NAV  =================== --}}
+                <div class="top-nav"></div>
+                {{!--  =================== LOGO AREA  =================== --}}
+                <div class="logo-area">
+                    {{!-- <h1>LOGO</h1> --}}
+
+                    {{!-- <img src="./Logo boutique de moda elegante rose (1).png" alt="Logo Raízes do Amor"> --}}
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="news-body">
+        <div class="news-container">
+
+            <div class="text-news">
+                <h1 class="title">Olá, {{raizes}}!</h1>
+            </div>
+
+            <p class="info-news">
+               {{mensagem}}
+            </p>
+    </main>
+    <footer>
+         <div class="copyrights">
+            <p style="color: black; text-align: center; font-size: 10px">Este e-mail foi enviado por {{email}}</p>
+        </div>
+    </footer>
+   
+</body>
+</html>

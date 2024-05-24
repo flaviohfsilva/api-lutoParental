@@ -21,7 +21,7 @@ export class Depoimentos {
   @Column('varchar', { name: 'nome', nullable: true, length: 255 })
   nome: string | null;
 
-  @Column('varchar', { name: 'texto', length: 1000 })
+  @Column('varchar', { name: 'texto', length: 10000 })
   texto: string;
 
   @Column('varchar', { name: 'genero', length: 45 })

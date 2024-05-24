@@ -17,7 +17,7 @@ export class Noticia {
   @Column('varchar', { name: 'titulo', length: 255 })
   titulo: string;
 
-  @Column('varchar', { name: 'texto', nullable: true, length: 1000 })
+  @Column('varchar', { name: 'texto', nullable: true, length: 10000 })
   texto: string | null;
 
   @Column('datetime', { name: 'data_hora' })

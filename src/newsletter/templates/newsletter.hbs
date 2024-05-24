@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{!-- <title>Newsletter</title> --}}
+
+    <style>
+
+        body {
+            background-color: #F4EEED;
+        }
+
+        .navbar {
+            border-bottom: #D9B2A9;
+        }
+
+        .top-nav{
+            background-color: #A5A68F;;
+        }
+        
+        .news-body {
+            background-color: #F2DBD5;
+        }
+
+        .news-container{
+            margin: 5%;
+        }
+
+        .text-news{
+            color: black;
+            margin: 2% 0 0;
+        }
+
+        .oque-esperar{
+            color: black;
+            text-align: justify;
+        }
+
+        .news-pontos{
+            margin: 3% 0;
+        }
+
+        .info-news{
+            color: black;
+            text-align: justify;  
+        }
+
+        .text-agradecimento{
+            color: black;
+        }
+
+      
+        .container-footer{
+            background: #A5A68F;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            padding: 5% 5% 0;
+        }
+
+        .footer-logo{
+            margin: 4% 0;
+        }
+
+        .footer-logo h2{
+            color: black;
+            font-family: "Sora", sans-serif;
+            font-size: 30px;
+            font-weight: 400;
+        }
+
+        .logo-area{
+            margin: 2%;
+        }
+
+        .logo-area h2{
+            margin: 0 0 2%
+        }
+
+        .subtitle{
+            color: black;
+            font-family: "Sora", sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+
+        .social-list{
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+
+        .social-links {
+            background-color: #D9B2A9;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            font-size: 24px;
+            height: 45px;
+            margin: 1%;
+            text-align: center;
+            opacity: 66%;
+            width: 45px;
+        }
+
+        .icon{
+            margin: 20% 0;
+            text-align: center;
+        }
+
+        .copyrights{
+            font-family: "Open Sans", sans-serif;
+            font-size: 10px
+            margin: 2% 0;
+            padding: 1% 0 3%;
+            text-align: center;
+        }
+
+
+    </style>
+</head>
+<body style="background-color: #F4EEED;">
+
+    {{!--  =================== NAVBAR =================== --}}
+    <header>
+        <nav class="navbar">
+            <div class="navbar-container">
+                 {{!--  =================== TOP NAV  =================== --}}
+                <div class="top-nav"></div>
+                {{!--  =================== LOGO AREA  =================== --}}
+                <div class="logo-area">
+                    {{!-- <h1>LOGO</h1> --}}
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="news-body">
+        <div class="news-container">
+
+            <div class="text-news">
+                <h1 class="title">Olá, {{nome}}!</h1>
+                <h2 class="subtile">Gostaríamos de agradecer por se inscrever em nossa newsletter!</h2>
+            </div>
+
+            <p class="info-news">
+                Sua inscrição é muito importante para nós, pois demonstra 
+                seu interesse em acompanhar os conteúdos que produzimos sobre 
+                o tema do luto perinatal.
+            </p>
+
+            <p class="info-news">
+                Nós, da Raízes do Amor, acreditamos que a informação e o apoio mútuo 
+                são ferramentas essenciais para auxiliar mães e cuidadores que estão 
+                passando por essa jornada tão difícil.
+            </p>
+
+            <p style="font-weight: 600; color: black;">O que você pode esperar da nossa newsletter: </p>
+
+            <ul class="oque-esperar">
+                <li class="news-pontos">
+                    <strong>Notícias e artigos informativos:</strong> Trazemos as últimas pesquisas, 
+                    descobertas e avanços no campo do luto perinatal, além de artigos escritos por 
+                    especialistas, oferecendo diferentes perspectivas e ferramentas para lidar com a dor.
+                </li>
+
+                <li class="news-pontos">
+                    <strong>Informações sobre direitos:</strong> Abordamos os direitos das mães e cuidadores em luto perinatal, 
+                    garantindo que você tenha acesso ao suporte necessário durante esse período difícil.
+                </li>
+
+                <li class="news-pontos">
+                    <strong>Um espaço seguro e acolhedor:</strong> Criamos um ambiente seguro e livre de julgamentos, onde você pode se sentir 
+                    à vontade para compartilhar suas experiências e buscar apoio.
+                </li>
+            </ul>
+
+            <p class="info-news">
+                <strong>
+                    Esperamos que você aproveite os conteúdos da nossa newsletter e que ela seja um suporte valioso em sua jornada.
+                </strong>
+            </p>
+
+            <p style="font-size: 10px;">
+                 P.S.: Não deixe de nos seguir nas redes sociais para acompanhar ainda mais novidades
+             </p>
+
+            <p class="text-agradecimento">
+                Atenciosamente,<br>
+                Equipe Raízes.
+            </p>
+        </div>
+
+    </main>
+
+    <footer class="section-footer">
+        <div class="container-footer">
+            <!--  =================== LOGO AREA ===================  -->
+            <div class="logo-area">
+                <!-- <img class="logo-img" src="" alt=""> -->
+                <h2>Raízes do Amor</h2>
+                <h3 class="subtitle">
+                Compartilhando Histórias de Perda e Esperança.
+                </h3>
+            </div>
+
+            <!--  =================== SOCIAL MEDIA ===================  -->
+            {{!-- <div class="social-media">
+                <ul class="social-list">
+                <li class="social-links">
+                    <i class="icon fa-brands fa-instagram"></i>
+                </li>
+                <li class="social-links">
+                    <i class="icon fa-brands fa-facebook-f"></i>
+                </li>
+                <li class="social-links">
+                    <i class="icon fa-brands fa-x-twitter"></i>
+                </li>
+                </ul>
+            </div> --}}
+            </div>
+        </div>
+         <div class="copyrights">
+            <p style="color: black; text-align: center; font-size: 10px">Copyright © 2024. Raízes do Amor.</p>
+        </div>
+
+         <div class="copyrights">
+            <p style="color: black; text-align: center; font-size: 10px">Este e-mail foi enviado para {{email}} porque você se inscreveu no nosso site.</p>
+            <p style="color: black; text-align: center; font-size: 10px;">Cancelar assinatura</p>
+        </div>
+    </footer>
+
+
+
+    
+</body>
+</html>
